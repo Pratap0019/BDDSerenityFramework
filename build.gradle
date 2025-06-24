@@ -1,19 +1,32 @@
 plugins {
     id 'java'
+    id 'eclipse'
+    id 'idea'
+    id "net.serenity-bdd.serenity-gradle-plugin" version "4.2.33"
 }
 
-group = 'org.example'
+group = 'org.bhanu'
 version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
+ext {
+    serenityVersion = '4.2.33'
+}
+
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation "net.serenity-bdd:serenity-core:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-cucumber:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityVersion}"
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'io.cucumber:cucumber-junit:7.14.0'
 }
 
 test {
-    useJUnitPlatform()
+    // Do NOT use useJUnitPlatform()
+    finalizedBy(aggregate)
 }
