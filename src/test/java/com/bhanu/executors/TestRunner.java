@@ -9,6 +9,6 @@ import org.junit.runner.RunWith;
         features = {"src/test/resources/features"},
         glue = {"com.bhanu.steps"},
         plugin = {"pretty"},
-        tags = "@testing"
+        tags = "@testingAPI"
 )
 public class TestRunner {}

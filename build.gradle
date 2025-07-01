@@ -12,6 +12,7 @@ repositories {
 
 ext {
     serenityVersion = '4.0.46'
+    restAssuredVersion = '5.4.0'
 }
 
 dependencies {
@@ -19,6 +20,7 @@ dependencies {
     implementation "net.serenity-bdd:serenity-cucumber:${serenityVersion}"
     implementation "net.serenity-bdd:serenity-screenplay:${serenityVersion}"
     implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-rest-assured:${serenityVersion}"
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
     testImplementation 'io.cucumber:cucumber-junit:7.14.0'
@@ -26,5 +28,7 @@ dependencies {
 
 test {
     // Do NOT use useJUnitPlatform()
+    systemProperty "file.encoding", "utf-8"
+    testLogging.showStandardStreams = true
     finalizedBy(aggregate)
 }
