@@ -8,6 +8,10 @@ A BDD test automation framework using **Serenity BDD 4.0.46** with **Cucumber JU
 ## Architecture
 
 ```
+src/main/java/com/bhanu/agents/
+├── JiraAgent.java                    ← Java CLI for Jira issue operations and feature scaffolding
+└── ConfluenceAgent.java              ← Java CLI for Confluence page operations
+
 src/test/
 ├── java/com/bhanu/
 │   ├── executors/TestRunner.java     ← Single Cucumber runner; controls which tags run
@@ -36,6 +40,12 @@ src/test/
 
 # Run only specific tagged scenarios (override without editing TestRunner)
 ./gradlew test -Dcucumber.filter.tags="@testing"
+
+# Run the Jira CLI agent (uses config.json at the project root)
+./gradlew runJiraAgent --args="list"
+
+# Run the Confluence CLI agent (uses config.json at the project root)
+./gradlew runConfluenceAgent --args="list"
 ```
 
 > **Important:** `build.gradle` explicitly comments `// Do NOT use useJUnitPlatform()`. This project uses JUnit 4 (Cucumber JUnit), not JUnit 5. Never add `useJUnitPlatform()`.
@@ -63,12 +73,15 @@ The active tag is set in `TestRunner.java` (`tags = "@testingAPI"`). Feature fil
 ### Configuration
 - `serenity.properties` (project root) is the single source of truth for driver, timeouts, base URL, and report settings
 - `src/test/resources/serenity.conf` exists but is intentionally empty
+- `config.json` (project root) holds Atlassian credentials and defaults for `com.bhanu.agents.JiraAgent` and `com.bhanu.agents.ConfluenceAgent`
 
 ---
 
 ## External Dependencies / Integration Points
 | Target | Type | Location |
 |---|---|---|
+| Jira Cloud (`/rest/api/3`) | REST API (private) | `src/main/java/com/bhanu/agents/JiraAgent.java`, `config.json` |
+| Confluence Cloud (`/wiki/rest/api`) | REST API (private) | `src/main/java/com/bhanu/agents/ConfluenceAgent.java`, `config.json` |
 | [petstore.swagger.io/v2](https://petstore.swagger.io/) | REST API (public) | `PetSteps.java` |
 | amazon.com | UI (Chrome) | `AmazonHomePage.java` |
 | google.com | UI (Chrome) | `GooglePage.java`, `serenity.properties` |
@@ -82,6 +95,7 @@ Chrome must be installed and `chromedriver` must be on `PATH` (or managed by Web
 2. Add a step-definition class under `com.bhanu.steps` — Serenity discovers all classes in that package via `glue`
 3. For UI tests, add a `PageObject` subclass under `com.bhanu.pages`
 4. Update `tags` in `TestRunner.java` (or pass via `-Dcucumber.filter.tags`) to include the new tag
+5. For Jira-backed BDD work, use `./gradlew runJiraAgent --args="generate-feature --id KAN-1 --tag automation"` to scaffold `src/test/resources/features/KAN_1.feature`, then refine the generated scenario and step definitions
 
 ## Jira Integration Workflow
 Generate BDD feature files directly from Jira requirements:
