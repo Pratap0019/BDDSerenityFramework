@@ -39,13 +39,30 @@ test {
 
 // ── Confluence Agent ──────────────────────────────────────────────────────────
 // Run with:  ./gradlew runConfluenceAgent --args="list"
-//            ./gradlew runConfluenceAgent --args="read --title \"My Page\""
-//            ./gradlew runConfluenceAgent --args="create --title \"T\" --body \"B\""
+//            ./gradlew runConfluenceAgent --args="read --title-file t.txt"
+//            ./gradlew runConfluenceAgent --args="create --title-file t.txt --body-file b.md"
 // ─────────────────────────────────────────────────────────────────────────────
 tasks.register('runConfluenceAgent', JavaExec) {
     group       = 'confluence'
     description = 'Run the ConfluenceReader agent CLI (pass --args="<command> [options]")'
     classpath   = sourceSets.main.runtimeClasspath
     mainClass   = 'com.bhanu.agents.ConfluenceAgent'
+}
+
+// ── Jira Agent ────────────────────────────────────────────────────────────────
+// Run with:  ./gradlew runJiraAgent --args="list"
+//            ./gradlew runJiraAgent --args="get --id BT-1"
+//            ./gradlew runJiraAgent --args="create --title-file t.txt --body-file b.txt --type Story"
+//            ./gradlew runJiraAgent --args="update --id BT-1 --body-file b.txt"
+//            ./gradlew runJiraAgent --args="comment --id BT-1 --body-file c.txt"
+//            ./gradlew runJiraAgent --args="transition --id BT-1 --status InProgress"
+//            ./gradlew runJiraAgent --args="generate-feature --id BT-1"
+//            ./gradlew runJiraAgent --args="search --jql project=BT"
+// ─────────────────────────────────────────────────────────────────────────────
+tasks.register('runJiraAgent', JavaExec) {
+    group       = 'jira'
+    description = 'Run the Jira agent CLI (pass --args="<command> [options]")'
+    classpath   = sourceSets.main.runtimeClasspath
+    mainClass   = 'com.bhanu.agents.JiraAgent'
 }
 

@@ -59,13 +59,7 @@ public class PetSteps {
 
     @When("I create a pet with ID {int} and name {string}")
     public void createPet(int id, String name) {
-        String body = String.format("""
-        {
-          "id": %d,
-          "name": "%s",
-          "status": "available"
-        }
-        """, id, name);
+        String body = String.format("{\n  \"id\": %d,\n  \"name\": \"%s\",\n  \"status\": \"available\"\n}", id, name);
 
         response = SerenityRest
                 .given()
