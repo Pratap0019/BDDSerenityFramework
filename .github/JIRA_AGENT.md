@@ -85,12 +85,11 @@ Run Jira agent through Gradle:
 ### Workflow B: Update existing issue fields
 
 ```powershell
-.\gradlew.bat runJiraAgent --args="update --id BT-101 --title \"Refine login acceptance criteria\""
-.\gradlew.bat runJiraAgent --args="update --id BT-101 --body-file .\notes\updated-description.txt"
-.\gradlew.bat runJiraAgent --args="update --id BT-101 --acceptance-file .\notes\ac.txt"
+.\gradlew.bat runJiraAgent --args="update --id KAN-101 --title \"Refine login acceptance criteria\""
+.\gradlew.bat runJiraAgent --args="update --id KAN-101 --body-file .\notes\updated-description.txt"
 ```
 
-If your current Jira agent implementation uses different option names for acceptance criteria or metadata fields, keep this document as behavioral intent and align actual flag names in implementation.
+**Note:** The current agent implementation uses `--body-file` for description updates. Custom fields like acceptance criteria can be added as future enhancements.
 
 ### Workflow C: Generate BDD feature from Jira requirement
 
@@ -137,9 +136,41 @@ A Jira-agent run is complete when:
 - Preserve existing content when performing partial updates.
 - For generated Gherkin, avoid implementation details in scenario text.
 
+## Practical Tips
+
+### Fetching Acceptance Criteria
+Use `--raw` flag to get full JSON and extract custom fields:
+```powershell
+.\gradlew.bat runJiraAgent --args="get --id KAN-1 --raw" | Out-String
+```
+
+Look for acceptance criteria in:
+- `fields.description` (often embedded as structured text)
+- Custom fields like `customfield_10XXX` (varies by Jira instance)
+
+### Searching Issues
+```powershell
+# All open tasks in current project
+.\gradlew.bat runJiraAgent --args="search --jql ""project=KAN AND status!=Done"""
+
+# Issues updated in last 7 days
+.\gradlew.bat runJiraAgent --args="search --jql ""project=KAN AND updated>=-7d"""
+```
+
+### Creating Feature Files in Batch
+```powershell
+# Generate features for multiple issues
+$issues = @("KAN-1", "KAN-2", "KAN-3")
+foreach ($issue in $issues) {
+    .\gradlew.bat runJiraAgent --args="generate-feature --id $issue --tag automation"
+}
+```
+
 ## Future Enhancements
+- Fix Gradle argument escaping for multi-word transition names.
 - Link generated feature files back to Jira issue comments.
 - Auto-generate step-definition stubs under `src/test/java/com/bhanu/steps/`.
 - Bulk generation from JQL query results.
 - Add dry-run mode for update operations.
+- Support custom field mapping for acceptance criteria extraction.
 

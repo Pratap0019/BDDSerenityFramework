@@ -83,3 +83,20 @@ Chrome must be installed and `chromedriver` must be on `PATH` (or managed by Web
 3. For UI tests, add a `PageObject` subclass under `com.bhanu.pages`
 4. Update `tags` in `TestRunner.java` (or pass via `-Dcucumber.filter.tags`) to include the new tag
 
+## Jira Integration Workflow
+Generate BDD feature files directly from Jira requirements:
+```powershell
+# Fetch task details
+.\gradlew.bat runJiraAgent --args="get --id KAN-1"
+
+# Get raw JSON (includes acceptance criteria)
+.\gradlew.bat runJiraAgent --args="get --id KAN-1 --raw"
+
+# Generate feature file from Jira task
+.\gradlew.bat runJiraAgent --args="generate-feature --id KAN-1 --tag automation"
+```
+
+Output: Creates `src/test/resources/features/KAN_1.feature` ready for automation.
+
+**See:** `JIRA_AGENT.md` for complete agent documentation and troubleshooting.
+
