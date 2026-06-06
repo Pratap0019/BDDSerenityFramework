@@ -11,8 +11,9 @@ repositories {
 }
 
 ext {
-    serenityVersion = '4.0.46'
+    serenityVersion    = '4.0.46'
     restAssuredVersion = '5.4.0'
+    jacksonVersion     = '2.17.2'
 }
 
 dependencies {
@@ -24,6 +25,9 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
     testImplementation 'io.cucumber:cucumber-junit:7.14.0'
+
+    // Confluence Agent — Jackson for JSON parsing
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 }
 
 test {
@@ -32,3 +36,16 @@ test {
     testLogging.showStandardStreams = true
     finalizedBy(aggregate)
 }
+
+// ── Confluence Agent ──────────────────────────────────────────────────────────
+// Run with:  ./gradlew runConfluenceAgent --args="list"
+//            ./gradlew runConfluenceAgent --args="read --title \"My Page\""
+//            ./gradlew runConfluenceAgent --args="create --title \"T\" --body \"B\""
+// ─────────────────────────────────────────────────────────────────────────────
+tasks.register('runConfluenceAgent', JavaExec) {
+    group       = 'confluence'
+    description = 'Run the ConfluenceReader agent CLI (pass --args="<command> [options]")'
+    classpath   = sourceSets.main.runtimeClasspath
+    mainClass   = 'com.bhanu.agents.ConfluenceAgent'
+}
+
