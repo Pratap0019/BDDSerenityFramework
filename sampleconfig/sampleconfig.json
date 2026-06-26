@@ -1,0 +1,19 @@
+{
+  "confluence": {
+    "base_url": "https://company.atlassian.net",
+    "space_key": "spaceKeyName",
+    "email": "your email id",
+    "api_token": "atlassian token"
+  },
+  "jira": {
+    "base_url": "https://company.atlassian.net/jira/",
+    "project_key": "KAN",
+    "email": "your email id",
+    "api_token": "atlassian token"
+  },
+  "agent": {
+    "max_results": 50,
+    "output_format": "markdown"
+  }
+}
+
