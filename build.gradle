@@ -66,3 +66,14 @@ tasks.register('runJiraAgent', JavaExec) {
     mainClass   = 'com.bhanu.agents.JiraAgent'
 }
 
+// ── Flow Orchestrator Agent ───────────────────────────────────────────────────
+// Run with:  ./gradlew runFlowOrchestrator --args="sync --confluence-title <title>"
+//            ./gradlew runFlowOrchestrator --args="sync --id <confluencePageId> --tag automation"
+// ─────────────────────────────────────────────────────────────────────────────
+tasks.register('runFlowOrchestrator', JavaExec) {
+    group       = 'orchestration'
+    description = 'Run the Confluence -> Jira -> Feature orchestration flow'
+    classpath   = sourceSets.main.runtimeClasspath
+    mainClass   = 'com.bhanu.agents.FlowOrchestratorAgent'
+}
+
