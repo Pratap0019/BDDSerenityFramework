@@ -1,4 +1,4 @@
-@testing
+@testingUI
 Feature: Search and add product to cart on Amazon
 
   Scenario: Search, Add and verify whether product is added in cart

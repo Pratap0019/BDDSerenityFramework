@@ -1,3 +1,4 @@
+@testingUI
 Feature: Google search functionality
 
   Scenario: Validate google search
